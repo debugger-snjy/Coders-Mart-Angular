@@ -1,25 +1,64 @@
+<app-header/>
 <div class="bg-white dark:bg-[#252d37] py-10" style="height: 90vh;">
   <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
-    <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+    <div
+      class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
       <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
           Login into Your account
         </h1>
-        <form class="space-y-4 md:space-y-6" (ngSubmit)="onSubmit()">
+        <form class="space-y-4 md:space-y-6" (ngSubmit)="submitForm()" [formGroup]="loginForm">
           <div>
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email <span class="text-red-700">*</span></label>
-            <input type="email" name="email" id="email" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email <span
+                class="text-red-700">*</span></label>
+            <input type="email" name="email" id="email" formControlName="email" required
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="name@company.com">
+            @if (
+            userLoginFormControls().email.invalid &&
+            (userLoginFormControls().email.dirty ||
+            userLoginFormControls().email.touched ||
+            submitted)
+            ) {
+            <div>
+              @if (userLoginFormControls().email.errors?.["required"]) {
+              <small class="errorMsg">Email is Required.</small>
+              }
+              @if (userLoginFormControls().email.errors?.['email']) {
+              <small class="errorMsg">Invalid Email Address</small>
+              }
+            </div>
+            }
           </div>
           <div>
-            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password <span class="text-red-700">*</span></label>
-            <input type="password" name="password" id="password" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="••••••••">
+            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password <span
+                class="text-red-700">*</span></label>
+            <input type="password" name="password" id="password" formControlName="password" required
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="••••••••">
+            @if (
+            userLoginFormControls().password.invalid &&
+            (userLoginFormControls().password.dirty ||
+            userLoginFormControls().password.touched ||
+            submitted)
+            ) {
+            <div>
+              @if (userLoginFormControls().password.errors?.["required"]) {
+              <small class="errorMsg">Password is Required.</small>
+              }
+            </div>
+            }
           </div>
-          <button type="submit" class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Login User</button>
+          <button type="submit"
+            class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Login
+            User</button>
           <p class="text-sm text-center font-light text-gray-500 dark:text-gray-400">
-            Don't have an account? <a routerLink="/signup" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign Up here</a>
+            Don't have an account? <a routerLink="/signup"
+              class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign Up here</a>
           </p>
         </form>
       </div>
     </div>
   </div>
 </div>
+<app-footer/>

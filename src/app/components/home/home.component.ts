@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { ProductItemComponent } from "../product-item/product-item.component";
 import { ProductService } from '../../services/product.service';
 import { HotToastService, Toast } from '@ngxpert/hot-toast';
+import { FooterComponent } from "../footer/footer.component";
+import { HeaderComponent } from "../header/header.component";
 
 @Component({
     selector: 'app-home',
     standalone: true,
     templateUrl: './home.component.html',
     styleUrl: './home.component.css',
-    imports: [ProductItemComponent]
+    imports: [ProductItemComponent, FooterComponent, HeaderComponent]
 })
 export class HomeComponent {
     products: any = [];
@@ -23,7 +25,7 @@ export class HomeComponent {
         this.productService.fetchAllProducts().subscribe(
             (res) => {
                 console.log("API Success", res);
-                this.showToast("success", "fetched Products");
+                // this.showToast("success", "fetched Products");
                 this.products = res;
                 this.products = this.products.data.products;
                 console.log(this.products)
