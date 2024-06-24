@@ -12,6 +12,7 @@ export class HeaderComponent {
   totalItems = 0;
   username: any;
   user: any;
+  cartItems: any;
   isUserLoggedIn: boolean = false;
 
   constructor(private router: Router) {
@@ -24,11 +25,13 @@ export class HeaderComponent {
 
     if (localStorage.getItem("user")) {
       this.username = JSON.parse(localStorage.getItem("user") || "{}").name;
-      this.user = JSON.parse(localStorage.getItem("user") || "{}")
+      this.user = JSON.parse(localStorage.getItem("user") || "{}");
       console.log(this.username)
       console.log(this.user)
       this.isUserLoggedIn = true;
     }
+    this.cartItems = JSON.parse(localStorage.getItem("cartItems") || "{}");
+    console.log(this.cartItems)
 
   }
 

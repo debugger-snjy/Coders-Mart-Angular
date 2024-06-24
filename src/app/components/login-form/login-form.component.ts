@@ -78,7 +78,7 @@ export class LoginFormComponent {
                 console.log(res)
                 let cartItems: any = res;
                 cartItems = cartItems.data ?? [];
-                localStorage.setItem("cartItems", cartItems)
+                localStorage.setItem("cartItems", cartItems.userCart)
               },
               (err)=>{
                 this.toast.error("Failed to Fetch Your Cart Items")
