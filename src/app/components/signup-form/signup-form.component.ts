@@ -1,103 +1,114 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { HotToastService } from '@ngxpert/hot-toast';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-signup-form',
-  standalone: true,
-  imports: [RouterLink],
-  templateUrl: './signup-form.component.html',
-  styleUrl: './signup-form.component.css'
+    selector: 'app-signup-form',
+    standalone: true,
+    imports: [RouterLink, FormsModule, CommonModule, ReactiveFormsModule],
+    templateUrl: './signup-form.component.html',
+    styleUrl: './signup-form.component.css'
 })
 export class SignupFormComponent {
 
+
+    // FormGroup Variable to handle the form Data & Validation
     registrationForm: FormGroup;
-    constructor(private _formBuilder: FormBuilder) {
 
-        // Adding default value in the FormControl parenthesis as '' and this will help to remove the null value and replace it with empty string
+    // Variable to check whether the form is submitted or not
+    submitted: boolean = false;
 
-        // this.registrationForm = new FormGroup({
-        //     id: new FormControl(''),
-        //     fname: new FormControl(''),
-        //     lname: new FormControl(''),
-        //     email: new FormControl(''),
-        //     mobno: new FormControl(''),
-        // })
-
-        // Here, we should avoid using new keywords, so modifying the above code
-        // this.registrationForm = _formBuilder.group({
-        //     id: new FormControl(),
-        //     fname: new FormControl(),
-        //     lname: new FormControl(),
-        //     email: new FormControl(),
-        //     mobno: new FormControl(),
-        // })
-
-        // Removing the new Keyword from the formControl as well in the above code and defining the default value in the form
-        // If we have more than one validators, then we have to add them in the array, so that all validators should be in 1nd index [2 position]
-
-        // compose function : Compose multiple validators into a single function that returns the union of the individual error maps for the provided control.
-        // Also, we should use Validator.compose if we have more than 1 validator, as it will make better performance and faster validation
-        this.registrationForm = _formBuilder.group({
-            id: ['12', Validators.required],
-            fname: ['Sanjay', [Validators.required, Validators.maxLength(30), Validators.minLength(5)]],
-            lname: ['Sukhwani', [Validators.required, Validators.maxLength(30), Validators.minLength(5)]],
-            email: ['', [Validators.required, Validators.email]],
-            mobno: ['', Validators.compose([Validators.required, Validators.pattern('^[7-9]{3}[0-9]{7}')])],
-        })
-
-        // ? valueChanges : It will provide the value of the field or the form on every change in the fields
-        // we have to subscribe to the valueChanges property
-        // valueChanges will run/ call/ execute the code written in it every time when the value of fname is changes
-        this.registrationForm.get('fname')?.valueChanges.subscribe(firstName => {
-            console.log("Updated First Name Value : ", firstName);
-        })
-
-        // valueChanges will run/ call/ execute the code written in it every time when the value of email is changes
-        this.registrationForm.get('email')?.valueChanges.subscribe(email => {
-            console.log("Updated Email Address Value : ", email);
-        })
-
-        // We can do that in the whole form as well
-        this.registrationForm.valueChanges.subscribe(formData => {
-            console.log("Updated Form Data : ", formData);
-            console.log("Updated Form Data Value For Fname : ", formData.fname);
-        })
-
-        // ? statusChanges : It will provide the status of the field or the form on every change in the fields
-        // we have to subscribe to the statusChanges property
-        // statusChanges will run/ call/ execute the code written in it every time when the status of fname is changes
-        this.registrationForm.get('fname')?.statusChanges.subscribe(firstNameStatus => {
-            console.log("First Name Validation Status : ", firstNameStatus);
-        })
-
-        // statusChanges will run/ call/ execute the code written in it every time when the status of email is changes
-        this.registrationForm.get('email')?.statusChanges.subscribe(emailStatus => {
-            console.log("Email Address Validation Status : ", emailStatus);
-        })
-
-        // We can do that in the whole form as well
-        this.registrationForm.statusChanges.subscribe(formData => {
-            console.log("Full Form Data Validation Status : ", formData);
+    // Constructor that will initialize the registrationForm variables and have validation
+    constructor(private fb: FormBuilder, private userService: UserService, private toast: HotToastService, private router: Router) {
+        this.registrationForm = this.fb.group({
+            name: ['', Validators.compose([Validators.required, Validators.maxLength(50), Validators.minLength(5)])],
+            email: ['', Validators.compose([Validators.required, Validators.email,])],
+            phone: ['', Validators.compose([Validators.required, Validators.pattern(/^[789]{1}\d{9}$/g)])],
+            password: ['', Validators.compose([Validators.required, Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)])],
+            gender: ['', Validators.compose([Validators.required])],
         })
 
     }
 
-    registerData(formData: FormGroup) {
-        console.log("Form Data :", formData.value);
-        // it will how true when all the fields are filled, otherwise false
-        console.log("Form validation Status :", formData.valid);
-
-        // we can use the formData as well as the registrationForm variable because both are same
-        // Getting all the Values Separately
-        console.log("First Name using formData Variable : ", formData.get('fname')?.value);
-        console.log("First Name using registrationForm Variable : ", this.registrationForm.get('fname')?.value);
-
+    // Function that will return the value of the specific form field
+    getRegistrationFromControl(value: string) {
+        return this.registrationForm.controls[value];
     }
 
-    // Function to reset the Form : 
-    resetForm() {
-        this.registrationForm.reset();
+    // Function to get all the data of the Form in the form of object
+    userRegistrationFormControls() {
+        return {
+            name: this.getRegistrationFromControl('name'),
+            email: this.getRegistrationFromControl('email'),
+            phone: this.getRegistrationFromControl('phone'),
+            password: this.getRegistrationFromControl('password'),
+            gender: this.getRegistrationFromControl('gender'),
+        }
+    }
+
+    // Function to call when we submit the form
+    submitForm() {
+        try {
+            if (this.registrationForm.valid) {
+
+                // Storing the form data
+                let registrationData = { ...this.registrationForm.value, role: "customer" }
+
+                // Printing the Form Data
+                console.log("Form Data : ", registrationData);
+                // alert("Form Submitted")
+
+                this.userService.createNewUserAPI(registrationData).subscribe(
+                    (res) => {
+                        console.log("API Success", res);
+                        this.showToast("success", res.message);
+                        this.router.navigate(['/login']);
+                    },
+                    (error) => {
+                        this.showToast("error", error.error.msg)
+                        console.log("API Error", error);
+                    }
+                )
+
+                // Resetting the form Variables
+                this.submitted = false;
+                this.registrationForm.reset();
+
+                // Removing all the validation errors shown in the form
+                Object.keys(this.registrationForm.controls).forEach(key => {
+                    this.registrationForm.controls[key].setErrors(null)
+                });
+            }
+            else {
+                this.submitted = true;
+                console.log(this.registrationForm.errors);
+            }
+        } catch (error) {
+            console.log("Error : ", error);
+
+        }
+    }
+
+    // Variable to hide the Eye Icon in Password Field
+    hide = true;
+
+    // Function to show thw password
+    clickEvent(event: MouseEvent) {
+        this.hide = !this.hide;
+        event.preventDefault();
+    }
+
+    // Function to show the Toast
+    showToast(type: string, msg: string) {
+        if (type === "success") {
+            this.toast.success(msg)
+        }
+        else if (type === "error") {
+            this.toast.error(msg)
+        }
     }
 
 }

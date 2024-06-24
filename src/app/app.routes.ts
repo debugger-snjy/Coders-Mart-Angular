@@ -3,6 +3,7 @@ import { SignupFormComponent } from './components/signup-form/signup-form.compon
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { ErrorComponent } from './components/error/error.component';
 import { LayoutComponent } from './components/layout/layout.component';
+import { HomeComponent } from './components/home/home.component';
 
 export const routes: Routes = [
 
@@ -10,6 +11,10 @@ export const routes: Routes = [
         path: '',
         component: LayoutComponent,
         children: [
+            {
+                path:'',
+                component:HomeComponent,
+            },
             {
                 path: 'login',
                 component: LoginFormComponent,

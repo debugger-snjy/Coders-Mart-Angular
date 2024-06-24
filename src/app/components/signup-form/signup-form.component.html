@@ -1,4 +1,4 @@
-<div class="bg-white dark:bg-[#252d37] py-10">
+<div class="bg-white dark:bg-[#252d37] py-3">
   <div
     class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0"
   >
@@ -11,7 +11,11 @@
         >
           Create an account
         </h1>
-        <form class="space-y-4 md:space-y-6">
+        <form
+          class="space-y-4 md:space-y-6"
+          [formGroup]="registrationForm"
+          (ngSubmit)="submitForm()"
+        >
           <div>
             <label
               for="name"
@@ -22,11 +26,38 @@
             <input
               type="text"
               name="name"
+              formControlName="name"
               id="name"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Your full name"
               required
             />
+            @if (
+              userRegistrationFormControls().name.invalid &&
+              (userRegistrationFormControls().name.dirty ||
+                userRegistrationFormControls().name.touched ||
+                submitted)
+            ) {
+              <div>
+                @if (userRegistrationFormControls().name.errors?.["required"]) {
+                  <small class="errorMsg">Name is Required.</small>
+                }
+                @if (
+                  userRegistrationFormControls().name.errors?.["maxlength"]
+                ) {
+                  <small class="errorMsg"
+                    >Name can be maximum 50 characters long.</small
+                  >
+                }
+                @if (
+                  userRegistrationFormControls().name.errors?.["minlength"]
+                ) {
+                  <small class="errorMsg"
+                    >Name must be at least 5 characters long.</small
+                  >
+                }
+              </div>
+            }
           </div>
           <div>
             <label
@@ -39,10 +70,25 @@
               type="email"
               name="email"
               id="email"
+              formControlName="email"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="name@company.com"
               required
             />
+            <!-- Showing the Errors that occur in the Form Field Value -->
+            @if (userRegistrationFormControls().email.invalid &&
+            (userRegistrationFormControls().email.dirty ||
+            userRegistrationFormControls().email.touched || submitted)) {
+            <div>
+                @if (userRegistrationFormControls().email.errors?.['required'])
+                {
+                <small class="errorMsg">Email Address is Required.</small>
+                }
+                @if (userRegistrationFormControls().email.errors?.['email']) {
+                <small class="errorMsg">Invalid Email Address</small>
+                }
+            </div>
+            }
           </div>
           <div>
             <label
@@ -55,10 +101,25 @@
               type="tel"
               name="phone"
               id="phone"
+              formControlName="phone"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="123-456-7890"
               required
             />
+            <!-- Showing the Errors that occur in the Form Field Value -->
+            @if (userRegistrationFormControls().phone.invalid &&
+            (userRegistrationFormControls().phone.dirty ||
+            userRegistrationFormControls().phone.touched || submitted)) {
+            <div>
+                @if (userRegistrationFormControls().phone.errors?.['required'])
+                {
+                <small class="errorMsg">Phone Number is Required.</small>
+                }
+                @if (userRegistrationFormControls().phone.errors?.['pattern']) {
+                <small class="errorMsg">Invalid Phone Number</small>
+                }
+            </div>
+            }
           </div>
           <div>
             <label
@@ -71,10 +132,27 @@
               type="password"
               name="password"
               id="password"
+              formControlName="password"
               placeholder="••••••••"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required
             />
+            @if (userRegistrationFormControls().password.invalid &&
+            (userRegistrationFormControls().password.dirty ||
+            userRegistrationFormControls().password.touched || submitted)) {
+            <div>
+                @if
+                (userRegistrationFormControls().password.errors?.['required']) {
+                <small class="errorMsg">Password is Required.</small>
+                }
+                @if
+                (userRegistrationFormControls().password.errors?.['pattern']) {
+                <small class="errorMsg"> Password Should have at least 8
+                    characters and must contain at least 1 uppercase letter, 1
+                    lowercase letter, and 1 number.</small>
+                }
+            </div>
+            }
           </div>
           <div>
             <label
@@ -85,18 +163,28 @@
             </label>
             <div class="flex flex-row space-x-4">
               <div>
-                <input type="radio" name="gender" id="male" value="male" />
+                <input type="radio" name="gender" id="male" value="male" formControlName="gender"/>
                 <span class="text-black dark:text-white">Male</span>
               </div>
               <div>
-                <input type="radio" name="gender" id="female" value="female" />
+                <input type="radio" name="gender" id="female" value="female" formControlName="gender"/>
                 <span class="text-black dark:text-white">Female</span>
               </div>
               <div>
-                <input type="radio" name="gender" id="others" value="others" />
+                <input type="radio" name="gender" id="others" value="others" formControlName="gender"/>
                 <span class="text-black dark:text-white">Others</span>
               </div>
             </div>
+            @if (userRegistrationFormControls().gender.invalid &&
+            (userRegistrationFormControls().gender.dirty ||
+            userRegistrationFormControls().gender.touched || submitted)) {
+            <div>
+                @if (userRegistrationFormControls().gender.errors?.['required'])
+                {
+                <small class="errorMsg">Gender is Required</small>
+                }
+            </div>
+            }
           </div>
           <div>
             <label
@@ -131,6 +219,7 @@
             </a>
           </p>
         </form>
+        <!-- <button (click)="showMyToast()" >Check Toast</button> -->
       </div>
     </div>
   </div>

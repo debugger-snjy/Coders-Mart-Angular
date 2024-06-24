@@ -19,7 +19,9 @@
     <span class="font-bold text-white">Coder's Mart</span>
   </a>
 
-  <div class="ml-1 mt-1 flex grow justify-end items-center">
+  <div class="ml-1 mt-1 flex grow justify-end items-center space-x-5">
+    <a class='' style="color:white" routerLink="/login">Login</a>
+    <a class='' style="color:white" routerLink="/signup">Sign Up</a>
     <div class="mx-8 relative">
       <div class="relative inline-flex">
         <a class="py-2" routerLink="/cart">
@@ -43,6 +45,8 @@
         </span>
       </div>
     </div>
+
+
 
     <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
       <div class="text-lg">{{ username ? username : "Guest" }}</div>
