@@ -45,7 +45,8 @@ export class HeaderComponent {
     logout() {
         localStorage.removeItem("user")
         localStorage.removeItem("token")
-
+        localStorage.removeItem("cartItems")
+        this.cartItems=null;
         this.user = null;
         this.username = null;
         this.isUserLoggedIn = false;

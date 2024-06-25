@@ -13,6 +13,7 @@ export class CartService {
 
   private getAuthHeaders() {
     const token = JSON.parse(localStorage.getItem("token") || '');
+    console.log(token);
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -23,6 +24,7 @@ export class CartService {
     return this.http.post<any>(`${this.server}/cart/`, { productID, quantity }, { headers: this.getAuthHeaders() })
       .pipe(
         map(response => {
+          console.log(response);
           return response;
         }),
         catchError(error => {

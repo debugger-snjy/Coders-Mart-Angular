@@ -8,11 +8,11 @@ import { CartService } from '../../services/cart.service';
 import { HeaderComponent } from "../header/header.component";
 import { FooterComponent } from "../footer/footer.component";
 @Component({
-    selector: 'app-login-form',
-    standalone: true,
-    templateUrl: './login-form.component.html',
-    styleUrl: './login-form.component.css',
-    imports: [RouterLink, FormsModule, CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent]
+  selector: 'app-login-form',
+  standalone: true,
+  templateUrl: './login-form.component.html',
+  styleUrl: './login-form.component.css',
+  imports: [RouterLink, FormsModule, CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent]
 })
 export class LoginFormComponent {
 
@@ -32,7 +32,6 @@ export class LoginFormComponent {
       email: ['', Validators.compose([Validators.required, Validators.email,])],
       password: ['', Validators.compose([Validators.required])],
     })
-
   }
 
   // Function that will return the value of the specific form field
@@ -48,6 +47,29 @@ export class LoginFormComponent {
     }
   }
 
+
+  async addItemsToCart(allCartItems: any[]) {
+    for (const item of allCartItems) {
+      try {
+        const res = await this.addItemToCartAsync(item._id, item.productQuantity);
+        this.toast.success("Item Saved in Cart");
+      } catch (error) {
+        console.error("Error adding item to cart", error);
+      }
+    }
+  }
+
+  // Helper function to convert observable to promise
+  addItemToCartAsync(itemId: string, quantity: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.cartService.addItemToCart(itemId, quantity).subscribe(
+        (res) => resolve(res),
+        (err) => reject(err)
+      );
+    });
+  }
+
+
   // Function to call when we submit the form
   submitForm() {
     try {
@@ -62,19 +84,24 @@ export class LoginFormComponent {
         // alert("Form Submitted")
 
         this.userService.loginUserAPI(loginUserData).subscribe(
-          (res) => {
+          async (res) => {
             console.log("API Success", res);
             this.showToast("success", res.message);
 
-            console.log("Data : ",res.data.user)
+            console.log("Data : ", res.data.user)
 
             // For Adding the Data in the Database
             const allCartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
-            
+
+            console.log(allCartItems)
 
             // Saving the Token in the localStorage and Getting the Cart Items
             localStorage.setItem("user", JSON.stringify(res.data.user))
             localStorage.setItem("token", JSON.stringify(res.data.token))
+
+
+            // Call the function to add all cart items
+            await this.addItemsToCart(allCartItems);
 
             // Getting the Cart Items
             this.cartService.getCartItems().subscribe(
@@ -82,9 +109,23 @@ export class LoginFormComponent {
                 console.log(res)
                 let cartItems: any = res;
                 cartItems = cartItems.data ?? [];
-                localStorage.setItem("cartItems", cartItems.userCart)
+
+                let allCartItems = cartItems.userCart[0].cartItems.map((item: any) => {
+                  console.log(item)
+                  return {
+                    "_id": item.itemID,
+                    "productName": item.itemName,
+                    "productDescription": item.itemDescription,
+                    "productPrice": item.itemPrice,
+                    "productImage": item.itemImage,
+                    "productInStock": item.itemInStock,
+                    "productQuantity": item.quantity
+                  }
+                })
+
+                localStorage.setItem("cartItems", JSON.stringify(allCartItems))
               },
-              (err)=>{
+              (err) => {
                 this.toast.error("Failed to Fetch Your Cart Items")
               }
             )
@@ -105,6 +146,8 @@ export class LoginFormComponent {
         Object.keys(this.loginForm.controls).forEach(key => {
           this.loginForm.controls[key].setErrors(null)
         });
+
+        // window.location.reload();
       }
       else {
         this.submitted = true;
