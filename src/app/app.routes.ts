@@ -5,6 +5,7 @@ import { ErrorComponent } from './components/error/error.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { HomeComponent } from './components/home/home.component';
 import { CartComponent } from './components/cart/cart.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 export const routes: Routes = [
 
@@ -27,6 +28,10 @@ export const routes: Routes = [
             {
                 path: 'cart',
                 component: CartComponent,
+            },
+            {
+                path: 'checkout',
+                component: CheckoutComponent,
             },
             // Added Error page if any other URL is visited
             {
