@@ -8,7 +8,8 @@ import { Observable, catchError, throwError } from 'rxjs';
 export class ProductService {
 
     private serverUrl = 'http://localhost:8000/v1/api';
-    private productsUrl = `${this.serverUrl}/products/`;
+    private productsFetchUrl = `${this.serverUrl}/products/`;
+    private productsAddUrl = `${this.serverUrl}/products/add`;
 
     constructor(private http: HttpClient) { }
 
@@ -17,7 +18,17 @@ export class ProductService {
             'Content-Type': 'application/json',
         });
 
-        return this.http.get<any[]>(this.productsUrl, { headers }).pipe(
+        return this.http.get<any[]>(this.productsFetchUrl, { headers }).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    addAllProducts(): Observable<any[]> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.post<any[]>(this.productsAddUrl, { headers }).pipe(
             catchError(this.handleError)
         );
     }
@@ -28,3 +39,5 @@ export class ProductService {
     }
 
 }
+
+
