@@ -15,6 +15,7 @@ import { HeaderComponent } from "../header/header.component";
 export class HomeComponent {
     products: any = [];
     addDummyProducts: any;
+    loading = true;
 
     constructor(private productService: ProductService, private toast: HotToastService) {
 
@@ -27,11 +28,13 @@ export class HomeComponent {
                 console.log("API Success", res);
                 // this.showToast("success", "fetched Products");
                 this.products = res;
+                this.loading = false;
                 this.products = this.products.data.products;
                 console.log(this.products)
                 // this.router.navigate(['/login']);
             },
             (error) => {
+                this.loading = false;
                 this.showToast("error", error.error.msg)
                 console.log("API Error", error);
             }

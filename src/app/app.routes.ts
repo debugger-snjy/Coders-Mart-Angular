@@ -4,6 +4,7 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { ErrorComponent } from './components/error/error.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { HomeComponent } from './components/home/home.component';
+import { CartComponent } from './components/cart/cart.component';
 
 export const routes: Routes = [
 
@@ -22,6 +23,10 @@ export const routes: Routes = [
             {
                 path: 'signup',
                 component: SignupFormComponent,
+            },
+            {
+                path: 'cart',
+                component: CartComponent,
             },
             // Added Error page if any other URL is visited
             {

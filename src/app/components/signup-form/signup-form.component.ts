@@ -4,13 +4,15 @@ import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from "../header/header.component";
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
     selector: 'app-signup-form',
     standalone: true,
-    imports: [RouterLink, FormsModule, CommonModule, ReactiveFormsModule],
     templateUrl: './signup-form.component.html',
-    styleUrl: './signup-form.component.css'
+    styleUrl: './signup-form.component.css',
+    imports: [RouterLink, FormsModule, CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent]
 })
 export class SignupFormComponent {
 
@@ -62,7 +64,7 @@ export class SignupFormComponent {
                 // alert("Form Submitted")
 
                 this.userService.createNewUserAPI(registrationData).subscribe(
-                    (res) => {
+                    async (res) => {
                         console.log("API Success", res);
                         this.showToast("success", res.message);
                         this.router.navigate(['/login']);
