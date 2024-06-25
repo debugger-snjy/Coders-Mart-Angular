@@ -4,11 +4,14 @@ import { Component, Input } from '@angular/core';
 @Component({
     selector: 'app-product-item',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule,],
     templateUrl: './product-item.component.html',
     styleUrl: './product-item.component.css'
 })
 export class ProductItemComponent {
+
+    @Input() productData: any;
+
     addToCart(item: any) {
         let itemsInCart = [];
 
@@ -20,16 +23,27 @@ export class ProductItemComponent {
 
         if (existingItemIndex !== -1) {
             // If item exists, update the quantity
-            itemsInCart[existingItemIndex].productQuantity += 1;
+            itemsInCart[existingItemIndex].productQuantity += this.qty;
         } else {
             // If item does not exist, add it to the cart
             item.productQuantity = 1; // Initialize quantity to 1
-            itemsInCart.push(item);
+            itemsInCart.push({ ...item, productQuantity: this.qty });
         }
 
         localStorage.setItem('cartItems', JSON.stringify(itemsInCart));
         console.log('Item added to cart:', item);
         window.location.reload()
     }
-    @Input() productData: any;
+
+    qty: any = 1;
+
+    increaseQty() {
+        this.qty++;
+    }
+    decreaseQty() {
+        if (this.qty > 1) {
+            this.qty--;
+        }
+    }
+
 }

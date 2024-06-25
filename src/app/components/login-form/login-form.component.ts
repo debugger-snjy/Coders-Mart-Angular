@@ -68,6 +68,10 @@ export class LoginFormComponent {
 
             console.log("Data : ",res.data.user)
 
+            // For Adding the Data in the Database
+            const allCartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+            
+
             // Saving the Token in the localStorage and Getting the Cart Items
             localStorage.setItem("user", JSON.stringify(res.data.user))
             localStorage.setItem("token", JSON.stringify(res.data.token))

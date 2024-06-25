@@ -14,7 +14,6 @@ import { HeaderComponent } from "../header/header.component";
 })
 export class HomeComponent {
     products: any = [];
-    addDummyProducts: any;
     loading = true;
 
     constructor(private productService: ProductService, private toast: HotToastService) {
@@ -49,5 +48,13 @@ export class HomeComponent {
         else if (type === "error") {
             this.toast.error(msg)
         }
+    }
+
+    addDummyProducts(){
+        this.productService.addAllProducts().subscribe(
+            (res)=>{
+                this.toast.success("Dummy Products Added")
+            }
+        )
     }
 }

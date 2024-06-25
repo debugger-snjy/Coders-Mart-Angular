@@ -15,9 +15,9 @@ import { FooterComponent } from "../footer/footer.component";
 export class CartComponent {
     totalAmount: any;
     cartItems: any;
-    isViewAll: any;
+    isViewAll: any = false;
     toggleViewAll() {
-        throw new Error('Method not implemented.');
+        this.isViewAll = true
     }
     totalBill: any;
     productData: any;
