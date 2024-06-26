@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { DarkThemeService } from '../../services/dark-theme.service';
 
 @Component({
     selector: 'app-header',
@@ -15,12 +16,40 @@ export class HeaderComponent {
     cartItems: any;
     isUserLoggedIn: boolean = false;
 
-    constructor(private router: Router) {
+    // Adding the Code For Theme Toggle
+    isDarkMode = localStorage.getItem("isDarkMode") === "true" ? true : false;
+    buttonClasses = `relative inline-flex items-center cursor-pointer px-4 py-2 ${this.isDarkMode ? 'bg-slate-950' : 'bg-gray-200'}`;
+
+    toggleDarkMode() {
+        this.isDarkMode = !this.isDarkMode;
+        this.darkModeService.toggleDarkMode(this.isDarkMode);
+        if (this.isDarkMode) {
+            localStorage.setItem("isDarkMode", "true")
+        }
+        else {
+            localStorage.setItem("isDarkMode", "false")
+        }
+    }
+
+    updateDarkModeClass() {
+        if (this.isDarkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }
+
+    constructor(private router: Router, private darkModeService: DarkThemeService) {
 
         this.cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
         console.log(this.cartItems)
         this.totalItems = this.cartItems.reduce((count: any, item: any) => count + item.productQuantity, 0);
         console.log(this.totalItems)
+
+        this.darkModeService.darkMode$.subscribe(mode => {
+            this.isDarkMode = mode;
+            this.updateDarkModeClass();
+        });
     }
 
 
@@ -40,6 +69,9 @@ export class HeaderComponent {
         this.totalItems = this.cartItems.reduce((count: any, item: any) => count + item.productQuantity, 0);
         console.log(this.totalItems)
 
+        if(this.isDarkMode){
+            this.updateDarkModeClass();
+        }
     }
 
     logout() {

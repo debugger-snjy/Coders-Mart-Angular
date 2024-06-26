@@ -2,7 +2,7 @@
 <div class="bg-white dark:bg-[#252d37] py-10" style="height: 90vh;">
   <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
     <div
-      class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+      class="w-full bg-gray-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
       <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
           Login into Your account
@@ -13,7 +13,7 @@
                 class="text-red-700">*</span></label>
             <input type="email" name="email" id="email" formControlName="email" required
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="name@company.com">
+              placeholder="Email Address">
             @if (
             userLoginFormControls().email.invalid &&
             (userLoginFormControls().email.dirty ||
@@ -22,10 +22,10 @@
             ) {
             <div>
               @if (userLoginFormControls().email.errors?.["required"]) {
-              <small class="errorMsg">Email is Required.</small>
+              <small class="text-red-500 dark:text-[#ff9696]">Email is Required.</small>
               }
               @if (userLoginFormControls().email.errors?.['email']) {
-              <small class="errorMsg">Invalid Email Address</small>
+              <small class="text-red-500 dark:text-[#ff9696]">Invalid Email Address</small>
               }
             </div>
             }
@@ -35,7 +35,7 @@
                 class="text-red-700">*</span></label>
             <input type="password" name="password" id="password" formControlName="password" required
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="••••••••">
+              placeholder="Password">
             @if (
             userLoginFormControls().password.invalid &&
             (userLoginFormControls().password.dirty ||
@@ -44,7 +44,7 @@
             ) {
             <div>
               @if (userLoginFormControls().password.errors?.["required"]) {
-              <small class="errorMsg">Password is Required.</small>
+              <small class="text-red-500 dark:text-[#ff9696]">Password is Required.</small>
               }
             </div>
             }

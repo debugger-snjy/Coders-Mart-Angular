@@ -6,6 +6,9 @@
 .errorMsg {
     color: red;
 }
+.dark-errorMsg{
+    color: rgb(255, 153, 153);
+}
 
 .mytoast {
     margin-top: 80px;

@@ -1,17 +1,18 @@
 <app-header />
 <form
   (ngSubmit)="placeOrder()"
-  class="bg-gray-700 text-white"
+  class="bg-white dark:bg-[#252d37] text-white"
   [formGroup]="addressForm"
+  style="height: 90vh;"
 >
   <div
-    class="grid gap-3 sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32 py-10 bg-gray-700 text-white"
+    class="grid gap-3 sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32 py-10 bg-white dark:bg-[#252d37] text-white"
   >
     <div class="px-4 pt-8">
       <p class="text-black dark:text-white text-xl font-medium">
         Order Summary
       </p>
-      <p class="text-gray-400 dark:text-gray-300">
+      <p class="text-gray-700 dark:text-gray-300">
         Check your items. And select a suitable shipping method.
       </p>
       <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
@@ -105,7 +106,7 @@
         ) {
           <div>
             @if (useraddressFormControls().address.errors?.["required"]) {
-              <small class="errorMsg">Address is Required.</small>
+              <small class="text-red-500 dark:text-[#ff9696]">Address is Required.</small>
             }
           </div>
         }

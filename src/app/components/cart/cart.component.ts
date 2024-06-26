@@ -19,7 +19,7 @@ export class CartComponent {
     isViewAll: any = false;
     discount: any = 3431
     toggleViewAll() {
-        this.isViewAll = true
+        this.isViewAll = !this.isViewAll
     }
     totalBill: any;
     productData: any;
