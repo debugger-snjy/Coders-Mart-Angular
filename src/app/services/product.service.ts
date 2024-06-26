@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -19,6 +19,20 @@ export class ProductService {
         });
 
         return this.http.get<any[]>(this.productsFetchUrl, { headers }).pipe(
+            map(response => {
+                console.log(response);
+                return response;
+            }),
+            catchError(this.handleError)
+        );
+    }
+
+    fetchSingleProduct(id: any): Observable<any[]> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.get<any[]>(this.productsFetchUrl + id, { headers }).pipe(
             catchError(this.handleError)
         );
     }

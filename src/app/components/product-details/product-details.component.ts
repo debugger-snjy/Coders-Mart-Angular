@@ -1,22 +1,33 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { CartService } from '../../services/cart.service';
 import { HotToastService } from '@ngxpert/hot-toast';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ProductService } from '../../services/product.service';
+import { CartService } from '../../services/cart.service';
+import { HeaderComponent } from "../header/header.component";
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
-    selector: 'app-product-item',
+    selector: 'app-product-details',
     standalone: true,
-    imports: [CommonModule,RouterLink],
-    templateUrl: './product-item.component.html',
-    styleUrl: './product-item.component.css'
+    templateUrl: './product-details.component.html',
+    styleUrl: './product-details.component.css',
+    imports: [HeaderComponent, FooterComponent]
 })
-export class ProductItemComponent {
+export class ProductDetailsComponent {
 
-    @Input() productData: any;
+    productData: any;
 
-    constructor(private cartService: CartService, private toast: HotToastService) {
+    constructor(private cartService: CartService, private productService: ProductService, private toast: HotToastService, private route: ActivatedRoute) {
 
+        const id = route.snapshot.paramMap.get("id");
+        console.log(id)
+
+        this.productService.fetchSingleProduct(id).subscribe(
+            (res) => {
+                this.productData = res;
+                this.productData = this.productData.data.product;
+            }
+        );
     }
 
     async addToCart(item: any) {

@@ -7,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { authGuard } from './guards/auth.guard';
+import { ProductDetailsComponent } from './components/product-details/product-details.component';
 
 export const routes: Routes = [
 
@@ -21,6 +22,10 @@ export const routes: Routes = [
             {
                 path: 'login',
                 component: LoginFormComponent,
+            },
+            {
+                path: 'product/:id',
+                component: ProductDetailsComponent,
             },
             {
                 path: 'signup',
