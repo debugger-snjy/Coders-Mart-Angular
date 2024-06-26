@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +24,13 @@ export class OrderService {
         const body = { paymentMode, address };
 
         return this.http.post<any>(url, body, { headers }).pipe(
+            map(response => {
+                console.log(response);
+
+                // Emptying the CartItems in LocalStorage
+                localStorage.removeItem("cartItems")
+                return response;
+            }),
             catchError(error => {
                 console.error('Error placing order:', error);
                 return throwError(error);

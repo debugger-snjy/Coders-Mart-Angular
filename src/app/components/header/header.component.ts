@@ -46,10 +46,14 @@ export class HeaderComponent {
         localStorage.removeItem("user")
         localStorage.removeItem("token")
         localStorage.removeItem("cartItems")
-        this.cartItems=null;
+        this.cartItems = null;
         this.user = null;
         this.username = null;
         this.isUserLoggedIn = false;
 
+        // Setting the LocalStorage For the Toast Message
+        localStorage.setItem("toast", JSON.stringify({ type: "success", msg: `Logout Successful` }))
+
+        window.location.href = "/";
     }
 }

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../header/header.component";
 import { FooterComponent } from "../footer/footer.component";
+import { DisplayToastService } from '../../services/display-toast.service';
 
 @Component({
     selector: 'app-cart',
@@ -16,6 +17,7 @@ export class CartComponent {
     totalAmount: any;
     cartItems: any;
     isViewAll: any = false;
+    discount: any = 3431
     toggleViewAll() {
         this.isViewAll = true
     }
@@ -23,11 +25,18 @@ export class CartComponent {
     productData: any;
     totalCartItems: any;
 
-    constructor() {
+    constructor(private toastService: DisplayToastService) {
+
+        if (localStorage.getItem("toast")) {
+            toastService.showMessage()
+        }
+
         this.cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
         console.log(this.cartItems)
         this.totalCartItems = this.cartItems.length
 
         this.totalBill = this.cartItems.reduce((bill: any, item: any) => bill + (item.productQuantity * item.productPrice), 0);
+
+        this.totalAmount = this.totalBill - this.discount;
     }
 }

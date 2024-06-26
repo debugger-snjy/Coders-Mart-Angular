@@ -6,6 +6,7 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { HomeComponent } from './components/home/home.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
 
@@ -31,6 +32,7 @@ export const routes: Routes = [
             },
             {
                 path: 'checkout',
+                canActivate:[authGuard],
                 component: CheckoutComponent,
             },
             // Added Error page if any other URL is visited

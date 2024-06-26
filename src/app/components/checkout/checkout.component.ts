@@ -80,9 +80,13 @@ export class CheckoutComponent {
                 this.orderService.placeOrder(loginUserData.paymentMode, loginUserData.address).subscribe(
                     (res) => {
                         this.toast.success("Order Placed Successfully !!")
+                        // Setting the LocalStorage For the Toast Message
+                        localStorage.setItem("toast", JSON.stringify({ type: "success", msg: `Order Placed Successfully` }))
+                        localStorage.removeItem("cartItems")
                     },
                     (error) => {
                         this.toast.error("Order Not Placed Successfully")
+                        // Setting the LocalStorage For the Toast Message
                     }
                 )
 
@@ -95,6 +99,8 @@ export class CheckoutComponent {
                 Object.keys(this.addressForm.controls).forEach(key => {
                     this.addressForm.controls[key].setErrors(null)
                 });
+
+                window.location.href = "/";
             }
             else {
                 this.submitted = true;

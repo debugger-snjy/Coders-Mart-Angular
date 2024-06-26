@@ -4,6 +4,7 @@ import { ProductService } from '../../services/product.service';
 import { HotToastService, Toast } from '@ngxpert/hot-toast';
 import { FooterComponent } from "../footer/footer.component";
 import { HeaderComponent } from "../header/header.component";
+import { DisplayToastService } from '../../services/display-toast.service';
 
 @Component({
     selector: 'app-home',
@@ -16,8 +17,8 @@ export class HomeComponent {
     products: any = [];
     loading = true;
 
-    constructor(private productService: ProductService, private toast: HotToastService) {
-
+    constructor(private productService: ProductService, private toast: HotToastService, private toastService: DisplayToastService) {
+        this.toastService.showMessage()
     }
 
     ngOnInit(): void {
