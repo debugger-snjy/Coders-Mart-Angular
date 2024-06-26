@@ -25,13 +25,12 @@ export class OrderService {
 
         return this.http.post<any>(url, body, { headers }).pipe(
             map(response => {
-                console.log(response);
+                console.log("Yes",response);
 
-                // Emptying the CartItems in LocalStorage
-                localStorage.removeItem("cartItems")
                 return response;
             }),
             catchError(error => {
+              localStorage.setItem("error",JSON.stringify(error))
                 console.error('Error placing order:', error);
                 return throwError(error);
             })

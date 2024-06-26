@@ -75,7 +75,6 @@ export class CheckoutComponent {
                 // Printing the Form Data
                 console.log("Form Data : ", loginUserData);
 
-
                 // Calling the API Function to Order the Cart Items
                 this.orderService.placeOrder(loginUserData.paymentMode, loginUserData.address).subscribe(
                     (res) => {
@@ -83,6 +82,7 @@ export class CheckoutComponent {
                         // Setting the LocalStorage For the Toast Message
                         localStorage.setItem("toast", JSON.stringify({ type: "success", msg: `Order Placed Successfully` }))
                         localStorage.removeItem("cartItems")
+                        return res
                     },
                     (error) => {
                         this.toast.error("Order Not Placed Successfully")
