@@ -1,7 +1,7 @@
 <div
-  class="bg-gray-200 px-5 py-2 rounded-lg border-2 border-black hover:shadow-md hover:shadow-black dark:bg-gray-900 dark:border-white dark:hover:bg-gray-800 dark:hover:shadow-white"
+  class="bg-gray-200 p-5 rounded-lg border-2 border-black hover:shadow-md hover:shadow-black dark:bg-gray-900 dark:border-white dark:hover:bg-gray-800 dark:hover:shadow-white"
 >
-  <div class="flex flex-row space-y-4 space-x-5">
+  <div class="flex lg:flex-row sm:flex-col space-y-4 lg:space-x-5 sm:space-x-0">
     <div class="overflow-hidden rounded-md">
       <img
         alt="Product gallery 1"
@@ -10,16 +10,21 @@
       />
     </div>
     <div>
-      <div class="w-full flex flex-row justify-between">
-        <div class="flex flex-col">
-          <h2 class="font-bold text-black dark:text-white">{{ productData.productName }}</h2>
+      <div class="w-full flex lg:flex-col flex-row justify-between">
+          <h2 class="font-bold text-black dark:text-white">
+            {{ productData.productName }}
+          </h2>
           <p class="text-lg font-medium text-gray-900 dark:text-gray-200">
             ₹{{ productData.productPrice }}
           </p>
           <div>
-        <div class="text-lg font-medium">Quantity : <span class="mx-2 text-bold text-lg">{{ productData.productQuantity }}</span></div>
-      </div>
-        </div>
+            <div class="text-lg font-medium">
+              Quantity :
+              <span class="mx-2 text-bold text-lg">{{
+                productData.productQuantity
+              }}</span>
+            </div>
+          </div>
       </div>
     </div>
   </div>
