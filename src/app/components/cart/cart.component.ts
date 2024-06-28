@@ -18,6 +18,7 @@ export class CartComponent {
     cartItems: any;
     isViewAll: any = false;
     discount: any = 3431
+    isProductOutOfStock: any;
     toggleViewAll() {
         this.isViewAll = !this.isViewAll
     }
@@ -38,5 +39,14 @@ export class CartComponent {
         this.totalBill = this.cartItems.reduce((bill: any, item: any) => bill + (item.productQuantity * item.productPrice), 0);
 
         this.totalAmount = this.totalBill - this.discount;
+
+        this.isProductOutOfStock = this.isProductOutOfStock = this.cartItems.filter((item: any) => item.productQuantity === 0).length === 0 ? false : true;
+    }
+
+    ngOnInit(): void {
+        //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+        //Add 'implements OnInit' to the class.
+        this.isProductOutOfStock = this.cartItems.filter((item:any) => item.productQuantity === 0).length === 0 ? false : true;
+
     }
 }

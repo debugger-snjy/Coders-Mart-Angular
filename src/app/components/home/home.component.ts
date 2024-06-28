@@ -26,19 +26,40 @@ export class HomeComponent {
         this.productService.fetchAllProducts().subscribe(
             (res) => {
                 console.log("API Success", res);
-                // this.showToast("success", "fetched Products");
                 this.products = res;
-                this.loading = false;
                 this.products = this.products.data.products;
-                console.log(this.products)
-                // this.router.navigate(['/login']);
+                console.log(this.products);
+
+                const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+                if (cartItems.length > 0) {
+                    let updatedCart = cartItems.map((cartItem: any) => {
+                        console.log("CHECK: ", cartItem)
+                        console.log("CHECK STOCK : ", cartItem.productInStock)
+                        const cartProduct = this.products.filter((product: any) => (product._id === cartItem._id))
+                        console.log("CHECK: ", cartProduct);
+                        console.log("CHECK STOCK : ", cartProduct[0].productInStock);
+
+                        if (cartProduct[0].productInStock) {
+                            localStorage.setItem("productStockOut", "true")
+                        }
+
+                        return { ...cartItem, productInStock: cartProduct[0].productInStock }
+                    });
+
+                    console.log("CHECK:", updatedCart)
+
+                    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+                }
+
+                this.loading = false;
             },
             (error) => {
                 this.loading = false;
-                this.showToast("error", error.error.msg)
+                this.showToast("error", error.error.msg);
                 console.log("API Error", error);
             }
-        )
+        );
+
     }
 
     // Function to show the Toast
@@ -51,9 +72,9 @@ export class HomeComponent {
         }
     }
 
-    addDummyProducts(){
+    addDummyProducts() {
         this.productService.addAllProducts().subscribe(
-            (res)=>{
+            (res) => {
                 this.toast.success("Dummy Products Added")
             }
         )

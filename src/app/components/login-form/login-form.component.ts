@@ -8,6 +8,7 @@ import { CartService } from '../../services/cart.service';
 import { HeaderComponent } from "../header/header.component";
 import { FooterComponent } from "../footer/footer.component";
 import { DisplayToastService } from '../../services/display-toast.service';
+import { ProductService } from '../../services/product.service';
 @Component({
     selector: 'app-login-form',
     standalone: true,

@@ -33,6 +33,10 @@ export class ProductService {
         });
 
         return this.http.get<any[]>(this.productsFetchUrl + id, { headers }).pipe(
+            map(response => {
+                console.log(response);
+                return response;
+            }),
             catchError(this.handleError)
         );
     }

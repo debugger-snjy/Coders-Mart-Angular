@@ -1,7 +1,12 @@
 <app-header />
 <div class="p-10 bg-white dark:bg-[#252d37] dark:text-white">
   <div class="flex flex-col space-y-4">
-    <div class="overflow-hidden rounded-md">
+    <div class="overflow-hidden relative rounded-md">
+      @if (productData.productInStock === 0) {
+        <span class="ribbon">OUT OF STOCK</span>
+      } @else if (productData.productInStock <= 5) {
+        <span class="yellow-ribbon text-black font-bold">FEW REMAINING</span>
+      }
       <img
         alt="Product gallery 1"
         [src]="productData.productImage"
@@ -15,86 +20,44 @@
         <p class="text-lg font-semibold m-0">₹{{ productData.productPrice }}</p>
       </div>
       <div>
-        <div class="text-lg font-medium">Quantity</div>
-        <p class="text-lg flex flex-row font-semibold select-none">
-          @if (qty == 1) {
-            <button
-              class="text-gray-500 dark:text-gray-700 inline mr-1"
-              disabled="true"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#9b9b9b"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-circle-minus"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <path d="M8 12h8" />
-              </svg>
-            </button>
-          } @else {
-            <button
-              class="text-gray-500 dark:text-gray-700 inline mr-1"
-              (click)="decreaseQty()"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-circle-minus stroke-black dark:stroke-white"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <path d="M8 12h8" />
-              </svg>
-            </button>
-          }
-          <span class="mx-2 text-bold text-lg">{{ qty }}</span>
-          <button
-            class="text-gray-500 dark:text-gray-700 inline ml-1"
-            (click)="increaseQty()"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-circle-plus stroke-black dark:stroke-white"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M8 12h8" />
-              <path d="M12 8v8" />
-            </svg>
-          </button>
-        </p>
+        
       </div>
     </div>
     <div class="flex flex-col space-y-2">
       <button
+        *ngIf="productData.productInStock === 0"
         type="button"
-        class="select-none rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-white dark:text-black dark:hover:bg-white/80 dark:focus-visible:outline-white"
-        (click)="addToCart(productData)"
+        class="select-none rounded-md bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-gray-400 dark:text-gray-800"
+        [disabled]="true"
       >
-        Add To Cart
+        OUT OF STOCK
       </button>
+
+      <ng-container *ngIf="productData.productInStock > 0">
+        <button
+          *ngIf="!isInCart(productData._id)"
+          type="button"
+          class="select-none rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-white dark:text-black dark:hover:bg-white/80 dark:focus-visible:outline-white"
+          (click)="addToCart(productData)"
+        >
+          Add To Cart
+        </button>
+        <button
+          *ngIf="isInCart(productData._id)"
+          type="button"
+          class="select-none rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-white dark:text-black dark:hover:bg-white/80 dark:focus-visible:outline-white"
+          (click)="removeFromCart(productData)"
+        >
+          Remove From Cart
+        </button>
+      </ng-container>
     </div>
     <div class="h-25">
       <h3 class="text-sm font-semibold">Product Details:</h3>
       <p class="text-sm">{{ productData.productDescription }}</p>
+      <h3 class="text-sm mt-5 font-semibold">
+        Product In Stock : {{ productData.productInStock }}
+      </h3>
     </div>
   </div>
 </div>

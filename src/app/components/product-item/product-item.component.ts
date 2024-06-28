@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'app-product-item',
     standalone: true,
-    imports: [CommonModule,RouterLink],
+    imports: [CommonModule, RouterLink],
     templateUrl: './product-item.component.html',
     styleUrl: './product-item.component.css'
 })
@@ -17,6 +17,10 @@ export class ProductItemComponent {
 
     constructor(private cartService: CartService, private toast: HotToastService) {
 
+    }
+
+    isInCart(productId: string): boolean {
+        return (localStorage.getItem("cartItems") && JSON.parse(localStorage.getItem("cartItems") || '[]').find((item: any) => item._id === productId)) ? true : false;
     }
 
     async addToCart(item: any) {
@@ -100,4 +104,65 @@ export class ProductItemComponent {
         });
     }
 
+    // Helper function to convert observable to promise
+    removeItemFromCartAsync(itemId: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.cartService.removeItemFromCart(itemId).subscribe(
+                (res) => resolve(res),
+                (err) => reject(err)
+            );
+        });
+    }
+
+    async removeFromCart(item: any) {
+        let itemsInCart = [];
+
+        if (localStorage.getItem('cartItems')) {
+            itemsInCart = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        }
+
+        const existingItemIndex = itemsInCart.findIndex((cartItem: any) => cartItem._id === item._id);
+
+        if (existingItemIndex !== -1) {
+            // If item exists, update the quantity
+            itemsInCart = itemsInCart.filter((cartItem: any) => cartItem._id !== item._id)
+
+        } else {
+        }
+
+        console.log("Check 1", item);
+
+        if (localStorage.getItem("token") || localStorage.getItem("user")) {
+            try {
+
+                const res = await this.removeItemFromCartAsync(item._id);
+
+                // Setting the LocalStorage For the Toast Message
+                localStorage.setItem("toast", JSON.stringify({ type: "success", msg: `${this.qty} ${item.productName} Removed From Your Cart` }))
+
+                console.log("Check 2");
+
+                localStorage.setItem('cartItems', JSON.stringify(itemsInCart));
+                console.log('Item Removed From cart:', item);
+
+                window.location.reload();
+
+            } catch (error) {
+            }
+        }
+        else {
+
+            console.log("Name : ", item)
+
+            // Setting the LocalStorage For the Toast Message
+            localStorage.setItem("toast", JSON.stringify({ type: "success", msg: `${this.qty} ${item.productName} Removed From Your Cart` }))
+
+            console.log("Check 2");
+
+            localStorage.setItem('cartItems', JSON.stringify(itemsInCart));
+            console.log('Item Removed From cart:', item);
+
+            window.location.reload();
+        }
+    }
 }
